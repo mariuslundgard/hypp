@@ -1,6 +1,6 @@
 {
   "name": "hypp",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A tiny library for building modern DOM nodes fast with (or without) JSX.",
   "main": "lib/cjs/hypp.js",
   "module": "lib/esm/hypp.js",
