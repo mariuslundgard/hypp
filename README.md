@@ -2,6 +2,8 @@
 
 A tiny library for building modern DOM nodes fast with (or without) JSX.
 
+[![npm version](https://img.shields.io/npm/v/hypp.svg?style=flat-square)](http://browsenpm.org/package/hypp)
+
 ## Installing
 
 ```sh
