@@ -1,0 +1,32 @@
+{
+  "name": "hypp",
+  "version": "0.0.0",
+  "description": "A tiny library for building modern DOM nodes fast with (or without) JSX.",
+  "main": "lib/cjs/hypp.js",
+  "module": "lib/esm/hypp.js",
+  "scripts": {
+    "build": "rollup --config",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mariuslundgard/hypp.git"
+  },
+  "author": "Marius Lundgård <studio@mariuslundgard.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mariuslundgard/hypp/issues"
+  },
+  "homepage": "https://github.com/mariuslundgard/hypp#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "jest": "^23.6.0",
+    "rollup": "^0.66.6",
+    "rollup-plugin-babel": "^4.0.3"
+  }
+}
