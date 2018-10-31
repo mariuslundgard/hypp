@@ -30,9 +30,6 @@ document.body.appendChild(<button events={events}>Click me</button>);
 The same example without JSX:
 
 ```js
-// @jsx element
-// @jsxFrag fragment
-
 import { element, fragment } from "hypp";
 
 const events = {
