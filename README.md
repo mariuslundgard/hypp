@@ -14,9 +14,8 @@ npm install --save hypp
 
 ```js
 // @jsx element
-// @jsxFrag fragment
 
-import { element, fragment } from "hypp";
+import { element } from "hypp";
 
 const events = {
   click() {
@@ -30,7 +29,7 @@ document.body.appendChild(<button events={events}>Click me</button>);
 The same example without JSX:
 
 ```js
-import { element, fragment } from "hypp";
+import { element } from "hypp";
 
 const events = {
   click() {
