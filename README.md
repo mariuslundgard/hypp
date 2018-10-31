@@ -41,6 +41,42 @@ const events = {
 document.body.appendChild(element("button", { events }, "Click me"));
 ```
 
+### Components
+
+```jsx
+// @jsx element
+
+import { element } from "hypp";
+
+function Counter(props) {
+  const state = { count: 0 };
+
+  const refs = {
+    count: <span>{String(state.count)}</span>
+  };
+
+  function decr() {
+    state.count--;
+    refs.count.firstChild.textContent = String(state.count);
+  }
+
+  function incr() {
+    state.count++;
+    refs.count.firstChild.textContent = String(state.count);
+  }
+
+  return (
+    <div>
+      {refs.count}
+      <button events={{ click: decr }}>-</button>
+      <button events={{ click: incr }}>+</button>
+    </div>
+  );
+}
+
+document.body.appendChild(<Counter count={0} />);
+```
+
 ## License
 
 MIT © [Marius Lundgård](https://mariuslundgard.com/)
