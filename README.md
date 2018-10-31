@@ -77,6 +77,22 @@ function Counter(props) {
 document.body.appendChild(<Counter count={0} />);
 ```
 
+### Fragments
+
+```jsx
+// @jsx element
+// @jsxFrag fragment
+
+import { element, fragment } from "hypp";
+
+document.body.appendChild(
+  <>
+    <strong>Fragments are cool</strong> because they let me avoid wrapping
+    elements in a root element!
+  </>
+);
+```
+
 ## License
 
 MIT © [Marius Lundgård](https://mariuslundgard.com/)
