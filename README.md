@@ -93,6 +93,75 @@ document.body.appendChild(
 );
 ```
 
+### Lifecycle hooks
+
+```jsx
+// @jsx element
+
+import { element } from "hypp";
+
+// A component that always knows the size of the window
+function SizeAware() {
+  const state = {
+    width: -1,
+    height: -1
+  };
+
+  const refs = {
+    width: <span>{String(state.width)}</span>,
+    height: <span>{String(state.height)}</span>,
+    root: null
+  };
+
+  function handleResize() {
+    state.width = window.innerWidth;
+    state.height = window.innerHeight;
+
+    // Update DOM
+    refs.width.firstChild.textContent = String(state.width);
+    refs.height.firstChild.textContent = String(state.height);
+    refs.root.style = `width: ${state.width}px; height: ${state.height}px`;
+  }
+
+  const hooks = {
+    connect() {
+      window.addEventListener("resize", handleResize);
+    },
+
+    disconnect() {
+      window.removeEventListener("resize", handleResize);
+    }
+
+    // Also supported:
+
+    // adapt () {
+    //   ...
+    // }
+
+    // observedAttributes: ['id'],
+    // attributeChange (attrKey, oldValue, newValue) {
+    //   ...
+    // }
+  };
+
+  refs.root = (
+    <div
+      hooks={hooks}
+      style={`width: ${state.width}px; height: ${state.height}px`}
+    >
+      width={refs.width} height={refs.height}
+    </div>
+  );
+
+  // Call resize handler to get initial window size
+  handleResize();
+
+  return refs.root;
+}
+
+document.body.appendChild(<SizeAware />);
+```
+
 ## License
 
 MIT © [Marius Lundgård](https://mariuslundgard.com/)
