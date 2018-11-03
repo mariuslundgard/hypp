@@ -1,10 +1,22 @@
-export function addEvents(elm, events) {
+import { CUSTOM_ATTRS, LOWER_CASE } from "./constants";
+
+const propsCache = new WeakMap();
+
+const SUPPORTS_CUSTOM_ELEMENTS = typeof customElements !== "undefined";
+
+function addEvents(elm, events) {
   Object.keys(events).forEach(eventType => {
     elm.addEventListener(eventType, events[eventType]);
   });
 }
 
-export function addStyle(elm, style) {
+function removeEvents(elm, events) {
+  Object.keys(events).forEach(eventType => {
+    elm.removeEventListener(eventType, events[eventType]);
+  });
+}
+
+function addStyle(elm, style) {
   if (typeof style === "string") {
     elm.style = style;
   } else {
@@ -20,7 +32,6 @@ const elementClasses = {
   ul: HTMLUListElement
 };
 
-const LOWER_CASE = "abcdefghijklmnopqrstuvwxyz";
 function createRandomString(len = 5) {
   let str = "";
   let i;
@@ -42,6 +53,11 @@ function createUniqueCustomElementName(prefix = "x") {
 }
 
 function createLifecycleElement(name, hooks) {
+  if (!SUPPORTS_CUSTOM_ELEMENTS) {
+    console.warn("The environment does not support the Custom Elements API");
+    return document.createElement(name);
+  }
+
   const BaseClass = elementClasses[name];
 
   if (!BaseClass) {
@@ -82,7 +98,6 @@ function createLifecycleElement(name, hooks) {
   return document.createElement(name, { is });
 }
 
-const CUSTOM_ATTRS = ["events", "hooks", "style"];
 export function element(name, props, ...children) {
   props = props || {};
 
@@ -90,6 +105,8 @@ export function element(name, props, ...children) {
     const elm = props.hooks
       ? createLifecycleElement(name, props.hooks)
       : document.createElement(name);
+
+    propsCache.set(elm, props);
 
     if (props.events) {
       addEvents(elm, props.events);
@@ -111,7 +128,11 @@ export function element(name, props, ...children) {
   } else {
     props.children = fragment(children);
 
-    return name(props);
+    const elm = name(props);
+
+    propsCache.set(elm, props);
+
+    return elm;
   }
 }
 
@@ -145,4 +166,90 @@ export function fragment(children) {
 
 export function text(str) {
   return document.createTextNode(str);
+}
+
+function getType(node) {
+  if (node.nodeType === 1) return "element";
+  if (node.nodeType === 3) return "text";
+  return -1; // unknown
+}
+
+function replace(oldNode, newNode) {
+  if (oldNode.parentNode) {
+    oldNode.parentNode.insertBefore(newNode, oldNode);
+    oldNode.parentNode.removeChild(oldNode);
+  }
+  return newNode;
+}
+
+function patchProps(a, b) {
+  const aProps = propsCache.get(a);
+  const bProps = propsCache.get(b);
+
+  // update props
+  if (aProps !== bProps) {
+    const aPropKeys = Object.keys(aProps);
+    const bPropKeys = Object.keys(bProps);
+
+    // remove props
+    aPropKeys
+      .filter(propKey => bPropKeys.indexOf(propKey) === -1)
+      .forEach(propKey => a.removeAttribute(propKey));
+
+    // set props
+    bPropKeys
+      .filter(propKey => aProps[propKey] !== bProps[propKey])
+      .forEach(propKey => a.setAttribute(propKey, bProps[propKey]));
+
+    // replace events
+    if (aProps.events) removeEvents(a, aProps.events);
+    if (bProps.events) addEvents(a, bProps.events);
+
+    // update cache
+    propsCache.set(a, bProps);
+  }
+}
+
+function patchChildren(a, b) {
+  const aLen = a.childNodes.length;
+  const bLen = b.childNodes.length;
+  const len = Math.max(aLen, bLen);
+  const appendNodes = [];
+  const removeNodes = [];
+
+  let i;
+  for (i = 0; i < len; i += 1) {
+    const aChild = a.childNodes[i];
+    const bChild = b.childNodes[i];
+
+    if (!aChild) {
+      appendNodes.push(bChild);
+    } else if (!bChild) {
+      removeNodes.push(aChild);
+    } else {
+      patch(aChild, bChild);
+    }
+  }
+
+  removeNodes.forEach(node => a.removeChild(node));
+  appendNodes.forEach(node => a.appendChild(node));
+}
+
+export function patch(a, b) {
+  const aType = getType(a);
+  const bType = getType(b);
+
+  if (aType !== bType) return replace(a, b);
+
+  const type = aType;
+
+  if (type === "element") {
+    if (a.nodeName !== b.nodeName) return replace(a, b);
+    patchProps(a, b);
+    patchChildren(a, b);
+  } else if (type === "text") {
+    a.textContent = b.textContent;
+  }
+
+  return a;
 }
