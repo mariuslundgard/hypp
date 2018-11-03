@@ -45,7 +45,7 @@ document.body.appendChild(element("button", { events }, "Click me"));
 ```jsx
 // @jsx element
 
-import { element } from "hypp";
+import { element, patch } from "hypp";
 
 function Counter(props) {
   const state = { count: 0 };
@@ -56,12 +56,12 @@ function Counter(props) {
 
   function decr() {
     state.count--;
-    refs.count.firstChild.textContent = String(state.count);
+    patch(refs.count, <span>{String(state.count)}</span>);
   }
 
   function incr() {
     state.count++;
-    refs.count.firstChild.textContent = String(state.count);
+    patch(refs.count, <span>{String(state.count)}</span>);
   }
 
   return (
@@ -97,7 +97,7 @@ document.body.appendChild(
 ```jsx
 // @jsx element
 
-import { element } from "hypp";
+import { element, patch } from "hypp";
 
 // A component that always knows the size of the window
 function SizeAware() {
@@ -105,22 +105,6 @@ function SizeAware() {
     width: -1,
     height: -1
   };
-
-  const refs = {
-    width: <span>{String(state.width)}</span>,
-    height: <span>{String(state.height)}</span>,
-    root: null
-  };
-
-  function handleResize() {
-    state.width = window.innerWidth;
-    state.height = window.innerHeight;
-
-    // Update DOM
-    refs.width.firstChild.textContent = String(state.width);
-    refs.height.firstChild.textContent = String(state.height);
-    refs.root.style = `width: ${state.width}px; height: ${state.height}px`;
-  }
 
   const hooks = {
     connect() {
@@ -138,22 +122,37 @@ function SizeAware() {
     // }
 
     // observedAttributes: ['id'],
+
     // attributeChange (attrKey, oldValue, newValue) {
     //   ...
     // }
   };
 
-  refs.root = (
-    <div
-      hooks={hooks}
-      style={`width: ${state.width}px; height: ${state.height}px`}
-    >
-      width={refs.width} height={refs.height}
-    </div>
-  );
+  function handleResize(applyPatch = true) {
+    state.width = window.innerWidth;
+    state.height = window.innerHeight;
+
+    // Patch the DOM
+    if (applyPatch) patch(refs.root, view());
+  }
+
+  function view() {
+    return (
+      <div
+        hooks={hooks}
+        style={`width: ${state.width}px; height: ${state.height}px`}
+      >
+        <span>{String(state.width)}</span> &times;{" "}
+        <span>{String(state.height)}</span>
+      </div>
+    );
+  }
 
   // Call resize handler to get initial window size
-  handleResize();
+  handleResize(false);
+
+  // Render DOM
+  refs.root = view();
 
   return refs.root;
 }
