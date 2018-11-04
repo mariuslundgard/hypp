@@ -2,11 +2,11 @@
   "name": "hypp",
   "version": "0.1.0-alpha.0",
   "description": "A tiny library for building modern DOM nodes fast with (or without) JSX.",
-  "main": "lib/cjs/server.js",
-  "module": "lib/esm/server.js",
+  "main": "./lib/cjs/server.js",
+  "module": "./lib/esm/server.js",
   "browser": {
-    "lib/cjs/server.js": "lib/cjs/browser.js",
-    "lib/esm/server.js": "lib/esm/browser.js"
+    "./lib/cjs/server.js": "./lib/cjs/browser.js",
+    "./lib/esm/server.js": "./lib/esm/browser.js"
   },
   "scripts": {
     "build": "rollup --config",

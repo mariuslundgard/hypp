@@ -183,8 +183,8 @@ function replace(oldNode, newNode) {
 }
 
 function patchProps(a, b) {
-  const aProps = propsCache.get(a);
-  const bProps = propsCache.get(b);
+  const aProps = propsCache.get(a) || {};
+  const bProps = propsCache.get(b) || {};
 
   // update props
   if (aProps !== bProps) {
@@ -193,11 +193,13 @@ function patchProps(a, b) {
 
     // remove props
     aPropKeys
+      .filter(propKey => CUSTOM_ATTRS.indexOf(propKey) === -1)
       .filter(propKey => bPropKeys.indexOf(propKey) === -1)
       .forEach(propKey => a.removeAttribute(propKey));
 
     // set props
     bPropKeys
+      .filter(propKey => CUSTOM_ATTRS.indexOf(propKey) === -1)
       .filter(propKey => aProps[propKey] !== bProps[propKey])
       .forEach(propKey => a.setAttribute(propKey, bProps[propKey]));
 
@@ -239,6 +241,12 @@ export function patch(a, b) {
   const aType = getType(a);
   const bType = getType(b);
 
+  const aProps = propsCache.get(a);
+
+  // If the initial node (a) does not have cached props, simply replace
+  if (!aProps) return replace(a, b);
+
+  // If the node types are not equal, simple replace
   if (aType !== bType) return replace(a, b);
 
   const type = aType;

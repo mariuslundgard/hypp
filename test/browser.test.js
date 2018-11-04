@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { element, fragment, patch } from "../src/browser";
+import { element, fragment, patch, text } from "../src/browser";
 import createA from "./fixtures/a";
 
 describe("hypp", () => {
@@ -46,7 +46,7 @@ describe("hypp", () => {
   describe("component", () => {
     it("should create component with DOM-effects", () => {
       const log = jest.fn();
-      const A = createA({ element, fragment, log, patch });
+      const A = createA({ element, fragment, log, patch, text });
 
       const elm = <A />;
       const decrBtn = elm.firstChild;

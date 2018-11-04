@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { element, fragment } from "../src/server";
+import { element, fragment, patch, text } from "../src/server";
 import createA from "./fixtures/a";
 
 describe("hypp/server", () => {
@@ -49,10 +49,10 @@ describe("hypp/server", () => {
 
     it("should render component with DOM-effects to HTML", () => {
       const log = jest.fn();
-      const A = createA({ element, log });
+      const A = createA({ element, fragment, log, patch, text });
 
       expect(<A />).toBe(
-        "<div><button>+</button><span>0</span><button>+</button></div>"
+        "<div><button>-</button><span>0</span><button>+</button></div>"
       );
     });
   });
