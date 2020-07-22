@@ -1,20 +1,21 @@
-import babel from "@rollup/plugin-babel";
+import babel from '@rollup/plugin-babel'
 
 export default {
-  input: "src/hypp.js",
+  input: 'src/hypp.js',
   output: [
     {
-      file: "lib/cjs/hypp.js",
-      format: "cjs"
+      file: 'lib/cjs/hypp.js',
+      format: 'cjs'
     },
     {
-      file: "lib/esm/hypp.js",
-      format: "esm"
+      file: 'lib/esm/hypp.js',
+      format: 'esm'
     }
   ],
   plugins: [
     babel({
-      exclude: "node_modules/**" // only transpile our source code
+      babelHelpers: 'bundled',
+      exclude: 'node_modules/**' // only transpile our source code
     })
   ]
-};
+}
