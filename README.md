@@ -7,7 +7,7 @@ A tiny library for building modern DOM nodes fast with (or without) JSX.
 ## Installing
 
 ```sh
-npm install --save hypp
+npm install hypp
 ```
 
 ## Basic usage
