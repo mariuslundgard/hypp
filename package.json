@@ -4,7 +4,7 @@
   "description": "A tiny library for building modern DOM nodes fast with (or without) JSX.",
   "files": [
     "dist",
-    "etc"
+    "src"
   ],
   "types": "./dist/index.d.ts",
   "source": "./src/index.ts",
