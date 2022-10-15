@@ -1,16 +1,15 @@
 {
   "extends": "./tsconfig.settings",
-  "include": ["**/*.ts", "**/*.tsx", "src/global.ts"],
-  "exclude": ["./dist"],
+  "include": ["./*.js", "./*.ts"],
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "./dist",
     "emitDeclarationOnly": true,
-    "jsx": "preserve",
-    "jsxFactory": "element",
-    "jsxFragmentFactory": "fragment",
-    "paths": {
-      "hypp": ["./src/index.ts"]
-    }
-  }
+    "types": ["node"]
+  },
+  "references": [
+    {"path": "./dev/tsconfig.json"},
+    {"path": "./test/tsconfig.json"},
+    {"path": "./tsconfig.dist.json"}
+  ]
 }

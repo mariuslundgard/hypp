@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.settings",
+  "include": ["../src", "./main.tsx"],
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "..",
+    "outDir": "../dist",
+    "emitDeclarationOnly": true,
+    "jsx": "preserve",
+    "jsxFactory": "element",
+    "jsxFragmentFactory": "fragment",
+    "paths": {
+      "hypp": ["../src"]
+    }
+  }
+}

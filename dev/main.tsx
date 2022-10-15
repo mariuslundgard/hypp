@@ -1,4 +1,4 @@
-import {element} from '../src'
+import {element} from 'hypp'
 
 function replace(el: HTMLElement, nextEl: HTMLElement) {
   el.parentNode?.insertBefore(nextEl, el)
