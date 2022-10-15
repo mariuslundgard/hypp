@@ -1,13 +1,26 @@
-import {element, fragment} from './hypp'
+/** @vitest-environment jsdom */
+
+import {element, fragment} from 'hypp'
+import {describe, expect, test} from 'vitest'
 
 describe('element', () => {
-  it('should create an element', () => {
+  test('should create an element', () => {
     const elm = <div />
 
     expect(elm.nodeName).toBe('DIV')
   })
 
-  it('should set attributes', () => {
+  test('should create a nested element', () => {
+    const elm = (
+      <div>
+        <code>test</code>
+      </div>
+    )
+
+    expect(elm.outerHTML).toBe('<div><code>test</code></div>')
+  })
+
+  test('should set attributes', () => {
     const elm = <div class="foo" id="bar" data-key="baz" />
 
     expect(elm.className).toBe('foo')
@@ -15,13 +28,13 @@ describe('element', () => {
     expect(elm.getAttribute('data-key')).toBe('baz')
   })
 
-  it('should add style (object)', () => {
+  test('should add style (object)', () => {
     const elm = <div style={{color: 'red'}} />
 
     expect(elm.style.color).toBe('red')
   })
 
-  it('should add style (string)', () => {
+  test('should add style (string)', () => {
     const elm = <div style="color: red;" />
 
     expect(elm.style.color).toBe('red')
@@ -29,7 +42,7 @@ describe('element', () => {
 })
 
 describe('fragment', () => {
-  it('should create a fragment', () => {
+  test('should create a fragment', () => {
     const frag = <>foo</>
 
     expect(frag).toBeInstanceOf(DocumentFragment)

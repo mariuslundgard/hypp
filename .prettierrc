@@ -1,8 +1,15 @@
 {
-  "arrowParens": "avoid",
   "bracketSpacing": false,
   "printWidth": 100,
   "semi": false,
   "singleQuote": true,
-  "trailingComma": "none"
+
+  "overrides": [
+    {
+      "files": ["*.yml"],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
 }

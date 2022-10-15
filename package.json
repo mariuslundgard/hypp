@@ -2,14 +2,26 @@
   "name": "hypp",
   "version": "0.0.4",
   "description": "A tiny library for building modern DOM nodes fast with (or without) JSX.",
-  "main": "lib/cjs/hypp.js",
-  "module": "lib/esm/hypp.js",
+  "files": [
+    "dist",
+    "etc"
+  ],
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
   "scripts": {
-    "build": "rollup --config",
-    "clean": "rimraf lib",
-    "prebuild": "npm run clean",
-    "prepublishOnly": "npm run build",
-    "test": "jest"
+    "build": "rimraf dist && pkg build --strict && pkg --strict",
+    "commit": "cz",
+    "dev": "cd dev && vite",
+    "format": "prettier --write --cache --ignore-unknown .",
+    "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
+    "prepare": "husky install",
+    "prepublishOnly": "pnpm build",
+    "release": "semantic-release",
+    "test": "vitest run",
+    "type-check": "tsc --build",
+    "watch": "pkg watch"
   },
   "repository": {
     "type": "git",
@@ -22,13 +34,57 @@
   },
   "homepage": "https://github.com/mariuslundgard/hypp#readme",
   "devDependencies": {
-    "@babel/core": "^7.10.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
-    "@babel/plugin-transform-react-jsx": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "@rollup/plugin-babel": "^5.1.0",
-    "jest": "^26.1.0",
+    "@babel/core": "^7.19.3",
+    "@babel/plugin-syntax-class-properties": "^7.12.13",
+    "@babel/plugin-syntax-jsx": "^7.18.6",
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@sanity/pkg-utils": "^1.15.1",
+    "@sanity/semantic-release-preset": "^2.0.2",
+    "@types/node": "^18.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.40.0",
+    "@typescript-eslint/parser": "^5.40.0",
+    "commitizen": "^4.2.5",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
+    "husky": "^8.0.1",
+    "jsdom": "^20.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.22.2"
+    "semantic-release": "^19.0.5",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.8",
+    "vitest": "^0.24.3"
+  },
+  "packageManager": "pnpm@7.12.2",
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ]
+  },
+  "release": {
+    "extends": "@sanity/semantic-release-preset",
+    "branches": [
+      "+([0-9])?(.{+([0-9]),x}).x",
+      "main",
+      {
+        "name": "beta",
+        "prerelease": true
+      },
+      {
+        "name": "alpha",
+        "prerelease": true
+      }
+    ]
   }
 }
