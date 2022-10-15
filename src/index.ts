@@ -1,4 +1,4 @@
-import './global.ts'
+import './global'
 
 export * from './element'
 export * from './empty'
