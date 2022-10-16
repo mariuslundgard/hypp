@@ -1,6 +1,6 @@
 {
   "name": "hypp",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0",
   "description": "Create DOM elements using JSX.",
   "files": [
     "dist",
