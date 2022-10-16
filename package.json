@@ -1,7 +1,7 @@
 {
   "name": "hypp",
   "version": "1.0.0-alpha.2",
-  "description": "A tiny library for building modern DOM nodes fast with (or without) JSX.",
+  "description": "Create DOM elements using JSX.",
   "files": [
     "dist",
     "src"
